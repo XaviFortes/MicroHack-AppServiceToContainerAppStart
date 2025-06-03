@@ -17,7 +17,7 @@ jobs:
           uses: azure/container-apps-deploy-action@v1
           with:
             acrName: ${{ secrets.ACR_USERNAME }}
-            containerAppName: managedEnvironment-user7-9db8
+            containerAppName: xavi
             resourceGroup: user7
             imageToDeploy: registryxavi.azurecr.io/xavi:latest
         # - name: Get Latest Container Image Tag
