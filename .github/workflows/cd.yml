@@ -9,20 +9,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-        - name: Get Latest Container Image Tag
-          id: get_tag
-          run: |
-              TAG=$(az acr repository show-tags --name microhackregistry --repository microhackapp --orderby time_desc --output tsv --detail | head -n 1 | awk '{print $4}')
-              NUMERIC_TAG=$(echo "$TAG" | grep -oE '[0-9]+')
-              INCREMENTED_TAG=$((NUMERIC_TAG + 1))
-              UPDATED_TAG=$(echo "$TAG" | sed "s/$NUMERIC_TAG/$INCREMENTED_TAG/")
-              echo "image_tag=$UPDATED_TAG" >> $GITHUB_OUTPUT
+        - name: Az Login
+          uses: azure/login@v1
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }} # These creds should be in JSON format, created from Azure CLI or Azure Portal
         - name: Build and deploy Container App
           uses: azure/container-apps-deploy-action@v1
           with:
-            appSourcePath: ${{ github.workspace }}/src
             acrName: ${{ secrets.ACR_USERNAME }}
-            containerAppName: 
+            containerAppName: managedEnvironment-user7-9db8
             resourceGroup: user7
+            imageToDeploy: registryxavi.azurecr.io/xavi:latest
+        # - name: Get Latest Container Image Tag
+        #   id: get_tag
+        #   run: |
+        #       TAG=$(az acr repository show-tags --name microhackregistry --repository microhackapp --orderby time_desc --output tsv --detail | head -n 1 | awk '{print $4}')
+        #       NUMERIC_TAG=$(echo "$TAG" | grep -oE '[0-9]+')
+        #       INCREMENTED_TAG=$((NUMERIC_TAG + 1))
+        #       UPDATED_TAG=$(echo "$TAG" | sed "s/$NUMERIC_TAG/$INCREMENTED_TAG/")
+        #       echo "image_tag=$UPDATED_TAG" >> $GITHUB_OUTPUT
+        # - name: Build and deploy Container App
+        #   uses: azure/container-apps-deploy-action@v1
+        #   with:
+        #     appSourcePath: ${{ github.workspace }}/src
+        #     acrName: ${{ secrets.ACR_USERNAME }}
+        #     containerAppName: 
+        #     resourceGroup: user7
 
         # Add additional deployment steps here

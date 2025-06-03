@@ -32,8 +32,8 @@ jobs:
       - name: Build and Push Image
         run: |
           az acr login --name registryxavi --username ${{ secrets.ACR_USERNAME }} --password ${{ secrets.ACR_PASSWORD }} &&
-          docker build -t registryxavi.azurecr.io/xavi:${{ github.sha }} -f dockerfile . &&
-          docker push registryxavi.azurecr.io/xavi:${{ github.sha }}
+          docker build -t registryxavi.azurecr.io/xavi:latest -f dockerfile . &&
+          docker push registryxavi.azurecr.io/xavi:latest
 
       # - name: ACR build
       #   id: acr
@@ -67,7 +67,7 @@ jobs:
           acrName: ${{ secrets.ACR_USERNAME }}
           containerAppName: managedEnvironment-user7-9db8
           resourceGroup: user7
-          imageToDeploy: registryxavi.azurecr.io/xavi:${{ github.sha }}
+          imageToDeploy: registryxavi.azurecr.io/xavi:latest
   #     - name: Checkout Repository
   #       uses: actions/checkout@v2
 
