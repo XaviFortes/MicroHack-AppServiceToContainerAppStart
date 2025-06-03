@@ -10,7 +10,7 @@ jobs:
 
     steps:
         - name: Az Login
-          uses: azure/login@v1
+          uses: azure/login@v2
           with:
             creds: ${{ secrets.AZURE_CREDENTIALS }} # These creds should be in JSON format, created from Azure CLI or Azure Portal
         - name: Build and deploy Container App
