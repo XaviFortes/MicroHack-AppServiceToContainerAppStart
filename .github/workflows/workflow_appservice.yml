@@ -29,21 +29,27 @@ jobs:
       #   with:
       #     name: .net-app
       #     path: ${{env.DOTNET_ROOT}}/myapp
-      - name: ACR build
-        id: acr
-        uses: azure/acr-build@v1
-        with:
-          service_principal: ${{ secrets.service_principal }}
-          service_principal_password: ${{ secrets.service_principal_password }}
-          tenant: ${{ secrets.tenant }}
-          registry: ${{ secrets.registry }}
-          repository: ${{ secrets.repository }}
-          image: xavi-microhack
-          git_access_token: ${{ secrets.git_access_token }}
-          folder: .
-          dockerfile: ../../dockerfile
-          branch: main
-          build_args: '[{"arg_one":"value_one"}, {"arg_two":"value_two"}]'
+      - name: Build and Push Image
+        run: |
+          az acr login --name registryxavi --username ${{ secrets.ACR_USERNAME }} --password ${{ secrets.ACR_PASSWORD }} &&
+          docker build -t registryxavi.azurecr.io/xavi:${{ github.sha }} -f dockerfile . &&
+          docker push registryxavi.azurecr.io/xavi:${{ github.sha }}
+
+      # - name: ACR build
+      #   id: acr
+      #   uses: azure/acr-build@v1
+      #   with:
+      #     service_principal: ${{ secrets.service_principal }}
+      #     service_principal_password: ${{ secrets.service_principal_password }}
+      #     tenant: ${{ secrets.tenant }}
+      #     registry: ${{ secrets.registry }}
+      #     repository: ${{ secrets.repository }}
+      #     image: xavi-microhack
+      #     git_access_token: ${{ secrets.git_access_token }}
+      #     folder: .
+      #     dockerfile: ../../dockerfile
+      #     branch: main
+      #     build_args: '[{"arg_one":"value_one"}, {"arg_two":"value_two"}]'
 
   # deploy:
   #   name: Deploy Solution
